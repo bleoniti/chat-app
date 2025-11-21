@@ -55,9 +55,10 @@ function App() {
               textAlign: "left",
               margin: "5px 0",
               padding: "5px 10px",
-              backgroundColor: "#e1f5fe",
+              backgroundColor: index % 2 === 0 ? "#e1f5fe" : "#b3e5fc",
               borderRadius: "5px",
-              display: "inline-block",
+              display: "block",
+              wordWrap: "break-word",
             }}
           >
             {msg}
