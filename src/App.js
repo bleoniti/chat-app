@@ -10,16 +10,13 @@ function App() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [typingUser, setTypingUser] = useState("");
-  const [darkMode, setDarkMode] = useState(false); 
+  const [darkMode, setDarkMode] = useState(false);
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
 
   // Socket listeners
   useEffect(() => {
-    socket.on("chat message", (msg) => {
-      setMessages((prev) => [...prev, msg]);
-    });
-
+    socket.on("chat message", (msg) => setMessages((prev) => [...prev, msg]));
     socket.on("typing", (user) => {
       if (user !== username) {
         setTypingUser(user);
@@ -27,7 +24,6 @@ function App() {
         typingTimeoutRef.current = setTimeout(() => setTypingUser(""), 2000);
       }
     });
-
     return () => {
       socket.off("chat message");
       socket.off("typing");
@@ -38,7 +34,6 @@ function App() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Functions
   const handleSetUsername = () => {
     if (tempName.trim() !== "") setUsername(tempName.trim());
   };
@@ -55,22 +50,16 @@ function App() {
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") sendMessage();
-  };
-
-  const handleTyping = () => {
-    socket.emit("typing", username);
-  };
-
+  const handleKeyPress = (e) => { if (e.key === "Enter") sendMessage(); };
+  const handleTyping = () => { socket.emit("typing", username); };
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
   // Styles
   const styles = {
     container: {
       maxWidth: "600px",
-      margin: "50px auto",
-      padding: "0 15px",
+      margin: "20px auto",
+      padding: "0 10px",
       fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
       backgroundColor: darkMode ? "#121212" : "#f0f0f0",
       color: darkMode ? "#fff" : "#222",
@@ -82,18 +71,26 @@ function App() {
       top: "50%",
       left: "50%",
       transform: "translate(-50%, -50%)",
-      fontSize: "100px",
+      fontSize: "80px",
       color: darkMode ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
       whiteSpace: "nowrap",
       pointerEvents: "none",
       userSelect: "none",
       zIndex: 0,
+      textAlign: "center",
     },
-    title: { textAlign: "center", marginBottom: "20px", zIndex: 1, position: "relative" },
+    title: {
+      textAlign: "center",
+      marginBottom: "15px",
+      zIndex: 1,
+      position: "relative",
+      fontSize: "24px",
+    },
     chatWindow: {
       borderRadius: "10px",
       padding: "15px",
-      height: "450px",
+      height: "60vh",
+      minHeight: "300px",
       overflowY: "scroll",
       background: darkMode ? "#1e1e1e" : "linear-gradient(135deg, #ffffff, #e0f7fa)",
       boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
@@ -108,7 +105,7 @@ function App() {
       margin: "5px 0",
       borderRadius: "20px",
       wordWrap: "break-word",
-      fontSize: "15px",
+      fontSize: "14px",
     },
     msgLeft: {
       backgroundColor: darkMode ? "#333" : "#2196f3",
@@ -126,7 +123,7 @@ function App() {
     timeText: { fontSize: "10px", color: "#888", marginTop: "3px", textAlign: "right" },
     inputContainer: { display: "flex", marginTop: "10px", flexDirection: "column", zIndex: 1 },
     typingText: { fontSize: "12px", color: darkMode ? "#bbb" : "#555", marginBottom: "5px", fontStyle: "italic" },
-    inputRow: { display: "flex" },
+    inputRow: { display: "flex", flexWrap: "wrap" },
     input: {
       flex: 1,
       padding: "12px 15px",
@@ -136,15 +133,19 @@ function App() {
       fontSize: "15px",
       backgroundColor: darkMode ? "#333" : "#fff",
       color: darkMode ? "#fff" : "#000",
+      minWidth: "0",
+      marginBottom: "5px",
     },
     sendButton: {
-      padding: "12px 25px",
+      padding: "12px 20px",
       border: "none",
       backgroundColor: "#2196f3",
       color: "white",
       cursor: "pointer",
       borderRadius: "0 25px 25px 0",
       fontWeight: "bold",
+      minWidth: "80px",
+      marginBottom: "5px",
     },
     darkModeButton: {
       margin: "10px auto",
@@ -158,10 +159,11 @@ function App() {
       fontWeight: "bold",
       zIndex: 1,
       position: "relative",
+      fontSize: "14px",
     },
-    nameContainer: { display: "flex", justifyContent: "center", marginBottom: "20px" },
-    nameInput: { padding: "12px 15px", borderRadius: "25px 0 0 25px", border: "1px solid #ccc", outline: "none", fontSize: "15px" },
-    nameButton: { padding: "12px 25px", border: "none", backgroundColor: "#2196f3", color: "white", cursor: "pointer", borderRadius: "0 25px 25px 0", fontWeight: "bold" },
+    nameContainer: { display: "flex", justifyContent: "center", marginBottom: "20px", flexWrap: "wrap" },
+    nameInput: { padding: "12px 15px", borderRadius: "25px 0 0 25px", border: "1px solid #ccc", outline: "none", fontSize: "15px", flex: "1 1 200px", marginBottom: "5px" },
+    nameButton: { padding: "12px 25px", border: "none", backgroundColor: "#2196f3", color: "white", cursor: "pointer", borderRadius: "0 25px 25px 0", fontWeight: "bold", flex: "0 0 auto", marginBottom: "5px" },
     footer: { textAlign: "center", fontSize: "12px", marginTop: "10px", color: darkMode ? "#bbb" : "#555", zIndex: 1, position: "relative" },
   };
 
